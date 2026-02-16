@@ -1,5 +1,5 @@
 {
-  "version": "1.1.4",
+  "version": "1.1.5",
   "default_voice": "ellie",
   "model": "voiceai-tts-v1-latest",
   "multilingual_model": "voiceai-tts-multilingual-v1-latest",

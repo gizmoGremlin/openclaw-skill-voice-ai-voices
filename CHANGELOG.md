@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.5] - 2026-02-16
+### Changed
+- Declare runtime requirements via `metadata.clawdbot` so ClawHub shows required env vars
+
 ## [1.1.4] - 2026-02-16
 ### Changed
 - Declare `VOICE_AI_API_KEY` as primary env var in metadata
