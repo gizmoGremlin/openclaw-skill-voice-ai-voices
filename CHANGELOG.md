@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.4] - 2026-02-16
+### Changed
+- Declare `VOICE_AI_API_KEY` as primary env var in metadata
+
 ## [1.1.3] - 2026-02-16
 ### Changed
 - Remove voice-sample upload features from the published bundle to reduce privacy risk

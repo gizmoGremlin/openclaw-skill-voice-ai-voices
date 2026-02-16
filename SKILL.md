@@ -2,9 +2,16 @@
 name: voice-ai-tts
 description: >
   High-quality voice synthesis with 9 personas, 11 languages, and streaming using Voice.ai API.
-version: 1.1.3
+version: 1.1.4
 tags: [tts, voice, speech, voice-ai, audio, streaming, multilingual]
-metadata: {"openclaw":{"requires":{"bins":["node"],"env":{"VOICE_AI_API_KEY":"required"},"note":"Set VOICE_AI_API_KEY via an environment variable."}}}
+metadata:
+  openclaw:
+    requires:
+      bins: ["node"]
+      env:
+        VOICE_AI_API_KEY: "required"
+      primary_env: "VOICE_AI_API_KEY"
+      note: "Set VOICE_AI_API_KEY via an environment variable."
 ---
 
 # Voice.ai Voices
@@ -266,6 +273,9 @@ const voices = await client.listVoices();
 ---
 
 ## 📋 Changelog
+
+### v1.1.4 (2026-02-16)
+- Declare `VOICE_AI_API_KEY` as primary env var in metadata
 
 ### v1.1.3 (2026-02-16)
 - Remove voice-sample upload features from the published bundle to reduce privacy risk

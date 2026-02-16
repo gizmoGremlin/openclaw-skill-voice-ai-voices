@@ -4,7 +4,7 @@
 # A comprehensive skill for Voice.ai's TTS API with speech generation,
 # streaming, and voice management capabilities.
 #
-# Version: 1.1.3
+# Version: 1.1.4
 # Author: Nick Gill (https://github.com/gizmoGremlin)
 # License: MIT
 # Documentation: https://voice.ai/docs
@@ -18,7 +18,7 @@ skill:
     multilingual support (11 languages), and flexible audio formats using the
     Voice.ai Developer API. Features include real-time streaming, WebSocket
     support for low-latency applications, and comprehensive voice management.
-  version: "1.1.3"
+  version: "1.1.4"
   author: "Nick Gill (https://github.com/gizmoGremlin)"
   icon: "🎙️"
   category: "audio"
@@ -714,6 +714,10 @@ examples:
 # ============================================================================
 
 changelog:
+  - version: "1.1.4"
+    date: "2026-02-16"
+    changes:
+      - "Declare primary env var in metadata for scanners"
   - version: "1.1.3"
     date: "2026-02-16"
     changes:
