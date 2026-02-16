@@ -4,7 +4,7 @@
  * A comprehensive JavaScript/Node.js SDK for Voice.ai's TTS API.
  * Supports voice cloning, speech generation, streaming, and voice management.
  * 
- * @version 1.0.0
+ * @version 1.1.0
  * @author Nick Gill (https://github.com/gizmoGremlin)
  * @license MIT
  * @see https://voice.ai/docs
@@ -33,6 +33,7 @@ const { URL } = require('url');
 // Constants
 // ============================================================================
 
+// Official Voice.ai production API endpoint (dev.voice.ai is the production domain).
 const BASE_URL = 'https://dev.voice.ai';
 const API_VERSION = 'v1';
 
@@ -168,6 +169,7 @@ class VoiceAI {
    * @param {string} apiKey - Your Voice.ai API key
    * @param {Object} options - Configuration options
    * @param {string} options.baseUrl - API base URL (default: https://dev.voice.ai)
+   *   Note: dev.voice.ai is the official production API domain.
    * @param {number} options.timeout - Request timeout in ms (default: 60000)
    */
   constructor(apiKey, options = {}) {

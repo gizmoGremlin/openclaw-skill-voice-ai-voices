@@ -1,0 +1,45 @@
+# Voice.ai Voices
+
+High-quality voice synthesis with 9 personas, 11 languages, streaming, and voice cloning using the Voice.ai API.
+
+## Quick Start
+
+```bash
+# Set API key (recommended)
+echo 'VOICE_AI_API_KEY=your-key-here' > .env
+
+# Generate speech
+node scripts/tts.js --text "Hello world!" --voice ellie
+
+# Streaming for long text
+node scripts/tts.js --text "Once upon a time..." --voice lilith --stream
+```
+
+## Configuration
+
+The CLI looks for `VOICE_AI_API_KEY` in this order:
+1. Environment variable
+2. Skill-local `.env` file
+
+## API Endpoint
+
+The SDK uses `https://dev.voice.ai`, which is the official Voice.ai production API domain.
+
+## Voices
+
+Voice definitions live in `voices.json`. Use the CLI with `--voice <name>`:
+
+```
+ellie, oliver, lilith, smooth, shadow, sakura, zenith, flora, commander
+```
+
+## Documentation
+
+- `SKILL.md` for full usage and examples
+- `voice-ai-tts.yaml` for the API spec
+- `voice-ai-tts-sdk.js` for SDK usage
+
+## Links
+
+- Voice.ai Dashboard: https://voice.ai/dashboard
+- Voice.ai Docs: https://voice.ai/docs

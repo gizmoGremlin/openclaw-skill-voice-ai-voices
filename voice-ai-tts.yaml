@@ -4,7 +4,7 @@
 # A comprehensive skill for Voice.ai's TTS API with voice cloning,
 # speech generation, streaming, and voice management capabilities.
 #
-# Version: 1.0.0
+# Version: 1.1.0
 # Author: Nick Gill (https://github.com/gizmoGremlin)
 # License: MIT
 # Documentation: https://voice.ai/docs
@@ -19,7 +19,7 @@ skill:
     Voice.ai Developer API. Features include instant voice cloning, real-time
     streaming, WebSocket support for low-latency applications, and comprehensive
     voice management.
-  version: "1.0.0"
+  version: "1.1.0"
   author: "Nick Gill (https://github.com/gizmoGremlin)"
   icon: "🎙️"
   category: "audio"
@@ -52,7 +52,7 @@ authentication:
 # ============================================================================
 
 api:
-  base_url: "https://dev.voice.ai"
+  base_url: "https://dev.voice.ai" # Official Voice.ai production API endpoint
   version: "v1"
   content_type: "application/json"
   timeout: 60000
@@ -111,19 +111,19 @@ voices:
     style: "Deep, smooth narrator"
     
   - id: "72d2a864-b236-402e-a166-a838ccc2c273"
-    name: "Corpse Husband"
+    name: "Shadow"
     gender: male
-    style: "Deep, distinctive YouTuber"
+    style: "Deep, distinctive narrator"
     
   - id: "559d3b72-3e79-4f11-9b62-9ec702a6c057"
-    name: "Skadi"
+    name: "Sakura"
     gender: female
-    style: "Anime, Arknights character"
+    style: "Anime-inspired character"
     
   - id: "ed751d4d-e633-4bb0-8f5e-b5c8ddb04402"
-    name: "Zhongli"
+    name: "Zenith"
     gender: male
-    style: "Deep, Genshin Impact character"
+    style: "Deep, dramatic baritone"
     
   - id: "a931a6af-fb01-42f0-a8c0-bd14bc302bb1"
     name: "Flora"
@@ -131,9 +131,9 @@ voices:
     style: "High pitch, cheerful"
     
   - id: "bd35e4e6-6283-46b9-86b6-7cfa3dd409b9"
-    name: "Master Chief"
+    name: "Commander"
     gender: male
-    style: "Deep heroic, Halo character"
+    style: "Deep heroic, commanding"
 
 # ============================================================================
 # Audio Formats
@@ -804,6 +804,12 @@ examples:
 # ============================================================================
 
 changelog:
+  - version: "1.1.0"
+    date: "2026-02-16"
+    changes:
+      - "Documented production API endpoint"
+      - "Renamed voice personas for IP-safe labeling"
+      - "Metadata alignment for credentials and config paths"
   - version: "1.0.0"
     date: "2026-01-30"
     changes:

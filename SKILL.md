@@ -2,7 +2,9 @@
 name: voice-ai-tts
 description: >
   High-quality voice synthesis with 9 personas, 11 languages, streaming, and voice cloning using Voice.ai API.
-version: 1.0.0
+version: 1.1.0
+tags: [tts, voice, speech, voice-ai, audio, streaming, voice-cloning, multilingual]
+metadata: {"openclaw":{"requires":{"bins":["node"],"env":{"VOICE_AI_API_KEY":"required"},"config_paths":[".env"],"note":"Set VOICE_AI_API_KEY via environment or .env"}}}
 ---
 
 # Voice.ai Voices
@@ -23,8 +25,7 @@ version: 1.0.0
 The scripts look for your API key in this order:
 
 1. `VOICE_AI_API_KEY` environment variable
-2. OpenClaw config (`~/.openclaw/openclaw.json`)
-3. Skill-local `.env` file
+2. Skill-local `.env` file
 
 **Get your API key:** [Voice.ai Dashboard](https://voice.ai/dashboard)
 
@@ -42,36 +43,15 @@ export VOICE_AI_API_KEY="your-api-key"
 
 ---
 
+## 🌐 API Endpoint
+
+The SDK and spec use `https://dev.voice.ai`, which is the official Voice.ai production API domain.
+
+---
+
 ## 🤖 OpenClaw Integration
 
-Add this skill to your OpenClaw configuration at `~/.openclaw/openclaw.json`:
-
-```json
-{
-  "skills": {
-    "voice-ai-tts": {
-      "enabled": true,
-      "api_key": "your-voice-ai-api-key",
-      "default_voice": "ellie",
-      "default_format": "mp3"
-    }
-  },
-  "tts": {
-    "skill": "voice-ai-tts",
-    "voice_id": "d1bf0f33-8e0e-4fbf-acf8-45c3c6262513",
-    "streaming": true
-  }
-}
-```
-
-### YAML config alternative
-
-```yaml
-tts:
-  skill: voice-ai-tts
-  voice_id: d1bf0f33-8e0e-4fbf-acf8-45c3c6262513
-  streaming: true
-```
+OpenClaw can invoke the CLI script directly if your environment exposes `VOICE_AI_API_KEY`. Use the `/tts` commands as configured by your OpenClaw installation.
 
 ---
 
@@ -105,11 +85,11 @@ These chat commands work with OpenClaw:
 | oliver  | `f9e6a5eb-a7fd-4525-9e92-75125249c933` | male   | british     | Narration, tutorials       |
 | lilith  | `4388040c-8812-42f4-a264-f457a6b2b5b9` | female | soft        | ASMR, calm content         |
 | smooth  | `dbb271df-db25-4225-abb0-5200ba1426bc` | male   | deep        | Documentaries, audiobooks  |
-| corpse  | `72d2a864-b236-402e-a166-a838ccc2c273` | male   | distinctive | Gaming, entertainment      |
-| skadi   | `559d3b72-3e79-4f11-9b62-9ec702a6c057` | female | anime       | Character voices           |
-| zhongli | `ed751d4d-e633-4bb0-8f5e-b5c8ddb04402` | male   | deep        | Gaming, dramatic content   |
+| shadow  | `72d2a864-b236-402e-a166-a838ccc2c273` | male   | distinctive | Gaming, entertainment      |
+| sakura  | `559d3b72-3e79-4f11-9b62-9ec702a6c057` | female | anime       | Character voices           |
+| zenith  | `ed751d4d-e633-4bb0-8f5e-b5c8ddb04402` | male   | deep        | Gaming, dramatic content   |
 | flora   | `a931a6af-fb01-42f0-a8c0-bd14bc302bb1` | female | cheerful    | Kids content, upbeat       |
-| chief   | `bd35e4e6-6283-46b9-86b6-7cfa3dd409b9` | male   | heroic      | Gaming, action content     |
+| commander | `bd35e4e6-6283-46b9-86b6-7cfa3dd409b9` | male   | heroic      | Gaming, action content     |
 
 ---
 
@@ -266,8 +246,13 @@ console.log('Voice ready!', voice);
 ```
 voice-ai-tts/
 ├── SKILL.md              # This documentation
+├── README.md             # Quick start
+├── CHANGELOG.md          # Version history
+├── voices.json           # Voice definitions
 ├── voice-ai-tts.yaml     # OpenAPI specification
 ├── voice-ai-tts-sdk.js   # JavaScript/Node.js SDK
+├── package.json          # OpenClaw metadata
+├── .gitignore            # Ignore local config and audio
 ├── scripts/
 │   └── tts.js            # CLI tool
 └── .env                  # API key (create this)
@@ -303,6 +288,12 @@ const voices = await client.listVoices();
 ---
 
 ## 📋 Changelog
+
+### v1.1.0 (2026-02-16)
+- Declared required credentials and config paths in metadata
+- Documented the production API endpoint domain
+- Renamed voice personas for IP-safe labeling
+- Added `voices.json` for voice data
 
 ### v1.0.0 (2025-01-31)
 - Initial release

@@ -6,18 +6,60 @@
 
 const VoiceAI = require('../voice-ai-tts-sdk');
 const fs = require('fs');
+const path = require('path');
 
-const VOICES = {
-  ellie: 'd1bf0f33-8e0e-4fbf-acf8-45c3c6262513',
-  oliver: 'f9e6a5eb-a7fd-4525-9e92-75125249c933',
-  lilith: '4388040c-8812-42f4-a264-f457a6b2b5b9',
-  smooth: 'dbb271df-db25-4225-abb0-5200ba1426bc',
-  corpse: '72d2a864-b236-402e-a166-a838ccc2c273',
-  skadi: '559d3b72-3e79-4f11-9b62-9ec702a6c057',
-  zhongli: 'ed751d4d-e633-4bb0-8f5e-b5c8ddb04402',
-  flora: 'a931a6af-fb01-42f0-a8c0-bd14bc302bb1',
-  chief: 'bd35e4e6-6283-46b9-86b6-7cfa3dd409b9'
-};
+const VOICES_PATH = path.join(__dirname, '..', 'voices.json');
+let cachedVoiceData = null;
+
+function loadVoiceData() {
+  if (!cachedVoiceData) {
+    const raw = fs.readFileSync(VOICES_PATH, 'utf8');
+    cachedVoiceData = JSON.parse(raw);
+  }
+  return cachedVoiceData;
+}
+
+function getVoiceMap() {
+  const data = loadVoiceData();
+  return data.voices || {};
+}
+
+function listVoiceNames() {
+  return Object.keys(getVoiceMap()).sort().join(', ');
+}
+
+function readEnvFile() {
+  const envPath = path.join(__dirname, '..', '.env');
+  if (!fs.existsSync(envPath)) {
+    return {};
+  }
+
+  const env = {};
+  const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) {
+      continue;
+    }
+    const idx = trimmed.indexOf('=');
+    if (idx === -1) {
+      continue;
+    }
+    const key = trimmed.slice(0, idx).trim();
+    let value = trimmed.slice(idx + 1).trim();
+    value = value.replace(/^['"]|['"]$/g, '');
+    env[key] = value;
+  }
+  return env;
+}
+
+function resolveApiKey() {
+  if (process.env.VOICE_AI_API_KEY) {
+    return process.env.VOICE_AI_API_KEY;
+  }
+  const env = readEnvFile();
+  return env.VOICE_AI_API_KEY;
+}
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -39,12 +81,12 @@ Usage:
 
 Options:
   --text     Text to convert to speech (required)
-  --voice    Voice name: ellie, oliver, lilith, smooth, corpse, skadi, zhongli, flora, chief
+  --voice    Voice name: ${listVoiceNames()}
   --output   Output file (default: output.mp3)
   --stream   Use streaming mode (good for long texts)
 
 Environment:
-  VOICE_AI_API_KEY  Your Voice.ai API key
+  VOICE_AI_API_KEY  Your Voice.ai API key (or set in .env)
 `);
       process.exit(0);
     }
@@ -60,14 +102,21 @@ async function main() {
     process.exit(1);
   }
   
-  const apiKey = process.env.VOICE_AI_API_KEY;
+  const apiKey = resolveApiKey();
   if (!apiKey) {
-    console.error('Error: VOICE_AI_API_KEY environment variable required');
+    console.error('Error: VOICE_AI_API_KEY is required (environment or .env file)');
     process.exit(1);
   }
   
   const client = new VoiceAI(apiKey);
-  const voiceId = opts.voice ? VOICES[opts.voice.toLowerCase()] : undefined;
+  const voiceMap = getVoiceMap();
+  const voiceName = opts.voice ? opts.voice.toLowerCase() : undefined;
+  const voiceEntry = voiceName ? voiceMap[voiceName] : undefined;
+  if (voiceName && !voiceEntry) {
+    console.error(`Error: Unknown voice "${opts.voice}". Available voices: ${listVoiceNames()}`);
+    process.exit(1);
+  }
+  const voiceId = voiceEntry ? voiceEntry.voice_id : undefined;
   
   console.log(`Generating speech${opts.stream ? ' (streaming)' : ''}...`);
   

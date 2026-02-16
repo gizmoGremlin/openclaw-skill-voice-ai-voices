@@ -1,0 +1,6 @@
+.env
+config.json
+.usage.json
+*.mp3
+samples/
+node_modules/
