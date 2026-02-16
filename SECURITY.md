@@ -5,7 +5,7 @@ This skill is a small Node.js CLI + SDK for Voice.ai text-to-speech.
 ## Credentials
 
 - The only credential used is `VOICE_AI_API_KEY`.
-- The CLI reads it from the `VOICE_AI_API_KEY` environment variable, or from a skill-local `.env` file.
+- The CLI reads it from the `VOICE_AI_API_KEY` environment variable.
 
 ## Network Access
 
@@ -17,9 +17,7 @@ This skill is a small Node.js CLI + SDK for Voice.ai text-to-speech.
 The skill reads/writes local files only for its documented behavior:
 
 - Reads `voices.json` to map friendly voice names to voice IDs.
-- Reads `.env` (if present) to load `VOICE_AI_API_KEY`.
 - Writes the generated audio to `--output` (default `output.mp3`).
-- Voice cloning (if you use it) uploads the audio file you explicitly provide via `cloneVoice({ file: 'path/to/file' })`.
 
 ## What This Skill Does Not Do
 

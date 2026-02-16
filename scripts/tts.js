@@ -28,39 +28,6 @@ function listVoiceNames() {
   return Object.keys(getVoiceMap()).sort().join(', ');
 }
 
-function readEnvFile() {
-  const envPath = path.join(__dirname, '..', '.env');
-  if (!fs.existsSync(envPath)) {
-    return {};
-  }
-
-  const env = {};
-  const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) {
-      continue;
-    }
-    const idx = trimmed.indexOf('=');
-    if (idx === -1) {
-      continue;
-    }
-    const key = trimmed.slice(0, idx).trim();
-    let value = trimmed.slice(idx + 1).trim();
-    value = value.replace(/^['"]|['"]$/g, '');
-    env[key] = value;
-  }
-  return env;
-}
-
-function resolveApiKey() {
-  if (process.env.VOICE_AI_API_KEY) {
-    return process.env.VOICE_AI_API_KEY;
-  }
-  const env = readEnvFile();
-  return env.VOICE_AI_API_KEY;
-}
-
 function parseArgs() {
   const args = process.argv.slice(2);
   const opts = { output: 'output.mp3', stream: false };
@@ -86,7 +53,7 @@ Options:
   --stream   Use streaming mode (good for long texts)
 
 Environment:
-  VOICE_AI_API_KEY  Your Voice.ai API key (or set in .env)
+  VOICE_AI_API_KEY  Your Voice.ai API key
 `);
       process.exit(0);
     }
@@ -102,9 +69,9 @@ async function main() {
     process.exit(1);
   }
   
-  const apiKey = resolveApiKey();
+  const apiKey = process.env.VOICE_AI_API_KEY;
   if (!apiKey) {
-    console.error('Error: VOICE_AI_API_KEY is required (environment or .env file)');
+    console.error('Error: VOICE_AI_API_KEY is required (set it as an environment variable)');
     process.exit(1);
   }
   

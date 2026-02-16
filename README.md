@@ -1,14 +1,14 @@
 # Voice.ai Voices
 
-High-quality voice synthesis with 9 personas, 11 languages, streaming, and voice cloning using the Voice.ai API.
+High-quality voice synthesis with 9 personas, 11 languages, and streaming using the Voice.ai API.
 
 Requires Node.js 18+.
 
 ## Quick Start
 
 ```bash
-# Set API key (recommended)
-echo 'VOICE_AI_API_KEY=your-key-here' > .env
+# Set API key
+export VOICE_AI_API_KEY="your-key-here"
 
 # Generate speech
 node scripts/tts.js --text "Hello world!" --voice ellie
@@ -19,9 +19,7 @@ node scripts/tts.js --text "Once upon a time..." --voice lilith --stream
 
 ## Configuration
 
-The CLI looks for `VOICE_AI_API_KEY` in this order:
-1. Environment variable
-2. Skill-local `.env` file
+The CLI requires `VOICE_AI_API_KEY` to be set as an environment variable.
 
 ## API Endpoint
 

@@ -1,10 +1,10 @@
 # ============================================================================
 # Voice.ai Text-to-Speech Skill
 # ============================================================================
-# A comprehensive skill for Voice.ai's TTS API with voice cloning,
-# speech generation, streaming, and voice management capabilities.
+# A comprehensive skill for Voice.ai's TTS API with speech generation,
+# streaming, and voice management capabilities.
 #
-# Version: 1.1.2
+# Version: 1.1.3
 # Author: Nick Gill (https://github.com/gizmoGremlin)
 # License: MIT
 # Documentation: https://voice.ai/docs
@@ -14,19 +14,17 @@ skill:
   name: voice-ai-tts
   display_name: "Voice.ai Text-to-Speech"
   description: |
-    High-quality voice synthesis with voice cloning, streaming audio generation,
+    High-quality voice synthesis with streaming audio generation,
     multilingual support (11 languages), and flexible audio formats using the
-    Voice.ai Developer API. Features include instant voice cloning, real-time
-    streaming, WebSocket support for low-latency applications, and comprehensive
-    voice management.
-  version: "1.1.2"
+    Voice.ai Developer API. Features include real-time streaming, WebSocket
+    support for low-latency applications, and comprehensive voice management.
+  version: "1.1.3"
   author: "Nick Gill (https://github.com/gizmoGremlin)"
   icon: "🎙️"
   category: "audio"
   tags:
     - text-to-speech
     - tts
-    - voice-cloning
     - audio-generation
     - speech-synthesis
     - ai-voice
@@ -192,7 +190,7 @@ tools:
     display_name: "List Voices"
     description: |
       Retrieve a list of available voices including public voices and your
-      cloned voices. Returns voice metadata including ID, name, language,
+      private voices. Returns voice metadata including ID, name, language,
       and visibility status.
     method: GET
     endpoint: "/api/v1/tts/voices"
@@ -418,66 +416,6 @@ tools:
           audio_format: "mp3"
 
   # --------------------------------------------------------------------------
-  # Clone Voice
-  # --------------------------------------------------------------------------
-  - name: clone_voice
-    display_name: "Clone Voice"
-    description: |
-      Clone a voice from reference audio. Upload an audio file (MP3, WAV, or OGG,
-      max 7.5MB) and get back a voice_id for future speech generation requests.
-    method: POST
-    endpoint: "/api/v1/tts/clone-voice"
-    content_type: "multipart/form-data"
-    parameters:
-      - name: file
-        type: file
-        required: true
-        description: "Audio file (MP3, WAV, or OGG format, max 7.5MB)"
-        accept: [".mp3", ".wav", ".ogg"]
-        max_size: "7.5MB"
-      - name: name
-        type: string
-        required: false
-        description: "Name for the cloned voice"
-      - name: voice_visibility
-        type: string
-        required: false
-        default: "PUBLIC"
-        enum: ["PUBLIC", "PRIVATE"]
-        description: "Voice visibility setting"
-      - name: language
-        type: string
-        required: false
-        default: "en"
-        enum: ["en", "es", "fr", "de", "it", "pt", "pl", "ru", "nl", "sv", "ca"]
-        description: "Primary language of the voice"
-    response:
-      type: object
-      properties:
-        voice_id:
-          type: string
-          description: "The created voice ID"
-        status:
-          type: string
-          enum: ["PENDING", "PROCESSING", "AVAILABLE", "FAILED"]
-          description: "Voice processing status"
-    example:
-      request:
-        method: POST
-        url: "https://dev.voice.ai/api/v1/tts/clone-voice"
-        headers:
-          Authorization: "Bearer YOUR_API_KEY"
-          Content-Type: "multipart/form-data"
-        body:
-          file: "@voice_sample.mp3"
-          name: "My Custom Voice"
-          voice_visibility: "PRIVATE"
-          language: "en"
-      response:
-        voice_id: "cloned_xyz789"
-        status: "PROCESSING"
-
-  # --------------------------------------------------------------------------
   # Update Voice
   # --------------------------------------------------------------------------
   - name: update_voice
@@ -526,7 +464,7 @@ tools:
   - name: delete_voice
     display_name: "Delete Voice"
     description: |
-      Delete a cloned voice. This is a permanent action and cannot be undone.
+      Delete a voice. This is a permanent action and cannot be undone.
       Owner-only operation.
     method: DELETE
     endpoint: "/api/v1/tts/voice/{voice_id}"
@@ -738,27 +676,6 @@ examples:
           for chunk in response.iter_content(chunk_size=1024):
               f.write(chunk)
 
-    clone_voice: |
-      import requests
-
-      API_KEY = "your_api_key_here"
-      
-      with open("voice_sample.mp3", "rb") as audio_file:
-          response = requests.post(
-              "https://dev.voice.ai/api/v1/tts/clone-voice",
-              headers={"Authorization": f"Bearer {API_KEY}"},
-              files={"file": audio_file},
-              data={
-                  "name": "My Cloned Voice",
-                  "voice_visibility": "PRIVATE",
-                  "language": "en"
-              }
-          )
-      
-      result = response.json()
-      print(f"Voice ID: {result['voice_id']}")
-      print(f"Status: {result['status']}")
-
   curl:
     list_voices: |
       curl -X GET "https://dev.voice.ai/api/v1/tts/voices?limit=10" \
@@ -770,13 +687,6 @@ examples:
         -H "Content-Type: application/json" \
         -d '{"text": "Hello world!", "audio_format": "mp3"}' \
         --output speech.mp3
-
-    clone_voice: |
-      curl -X POST "https://dev.voice.ai/api/v1/tts/clone-voice" \
-        -H "Authorization: Bearer YOUR_API_KEY" \
-        -F "file=@voice_sample.mp3" \
-        -F "name=My Voice" \
-        -F "voice_visibility=PRIVATE"
 
   typescript:
     generate_speech: |
@@ -804,10 +714,14 @@ examples:
 # ============================================================================
 
 changelog:
+  - version: "1.1.3"
+    date: "2026-02-16"
+    changes:
+      - "Remove voice-sample upload tool entry to reduce privacy risk"
   - version: "1.1.2"
     date: "2026-02-16"
     changes:
-      - "Add SECURITY.md and LICENSE for provenance"
+      - "Add SECURITY.md and LICENSE.md for provenance"
       - "Restrict SDK to https only (remove http transport)"
   - version: "1.1.1"
     date: "2026-02-16"
@@ -824,7 +738,6 @@ changelog:
     changes:
       - "Initial release"
       - "Support for all TTS endpoints"
-      - "Voice cloning capabilities"
       - "HTTP and WebSocket streaming"
       - "Multilingual support (11 languages)"
       - "Comprehensive audio format options"

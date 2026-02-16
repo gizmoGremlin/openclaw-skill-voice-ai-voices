@@ -1,8 +1,13 @@
 # Changelog
 
+## [1.1.3] - 2026-02-16
+### Changed
+- Remove voice-sample upload features from the published bundle to reduce privacy risk
+- Require `VOICE_AI_API_KEY` via environment variable only
+
 ## [1.1.2] - 2026-02-16
 ### Changed
-- Added `SECURITY.md` and `LICENSE` for provenance and transparency
+- Added `SECURITY.md` and `LICENSE.md` for provenance and transparency
 - Restricted SDK transport to HTTPS only
 
 ## [1.1.1] - 2026-02-16

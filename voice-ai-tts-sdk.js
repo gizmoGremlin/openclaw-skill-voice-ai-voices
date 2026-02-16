@@ -2,9 +2,9 @@
  * Voice.ai Text-to-Speech SDK
  * 
  * A comprehensive JavaScript/Node.js SDK for Voice.ai's TTS API.
- * Supports voice cloning, speech generation, streaming, and voice management.
+ * Supports speech generation, streaming, and voice management.
  * 
- * @version 1.1.2
+ * @version 1.1.3
  * @author Nick Gill (https://github.com/gizmoGremlin)
  * @license MIT
  * @see https://voice.ai/docs
@@ -25,7 +25,6 @@
 
 const https = require('https');
 const fs = require('fs');
-const path = require('path');
 const { URL } = require('url');
 
 // ============================================================================
@@ -219,7 +218,7 @@ class VoiceAI {
       port: url.port || 443,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
-        'User-Agent': 'VoiceAI-SDK/1.1.2',
+        'User-Agent': 'VoiceAI-SDK/1.1.3',
         ...options.headers
       },
       timeout: this.timeout
@@ -323,7 +322,7 @@ class VoiceAI {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
-        'User-Agent': 'VoiceAI-SDK/1.1.2',
+        'User-Agent': 'VoiceAI-SDK/1.1.3',
         ...options.headers
       }
     };
@@ -419,77 +418,6 @@ class VoiceAI {
     }
     
     return this._request('DELETE', `/tts/voice/${voiceId}`);
-  }
-
-  // --------------------------------------------------------------------------
-  // Voice Cloning
-  // --------------------------------------------------------------------------
-
-  /**
-   * Clone a voice from audio file
-   * @param {Object} options - Clone options
-   * @param {string|Buffer} options.file - Audio file path or buffer
-   * @param {string} options.name - Name for the cloned voice
-   * @param {string} options.visibility - PUBLIC or PRIVATE
-   * @param {string} options.language - Language code (default: 'en')
-   * @returns {Promise<Object>} Clone response with voice_id and status
-   */
-  async cloneVoice(options) {
-    const { file, name, visibility = 'PUBLIC', language = 'en' } = options;
-    
-    if (!file) {
-      throw new ValidationError('Audio file is required');
-    }
-
-    // Read file if path provided
-    let fileBuffer;
-    let fileName;
-    
-    if (typeof file === 'string') {
-      fileBuffer = fs.readFileSync(file);
-      fileName = path.basename(file);
-    } else if (Buffer.isBuffer(file)) {
-      fileBuffer = file;
-      fileName = 'audio.mp3';
-    } else {
-      throw new ValidationError('File must be a path string or Buffer');
-    }
-
-    // Build multipart form data
-    const boundary = '----VoiceAIBoundary' + Math.random().toString(36).substring(2);
-    
-    let formData = '';
-    
-    // Add file
-    formData += `--${boundary}\r\n`;
-    formData += `Content-Disposition: form-data; name="file"; filename="${fileName}"\r\n`;
-    formData += `Content-Type: audio/mpeg\r\n\r\n`;
-    
-    const formDataBuffer = Buffer.concat([
-      Buffer.from(formData),
-      fileBuffer,
-      Buffer.from('\r\n')
-    ]);
-
-    // Add other fields
-    let fields = '';
-    if (name) {
-      fields += `--${boundary}\r\nContent-Disposition: form-data; name="name"\r\n\r\n${name}\r\n`;
-    }
-    fields += `--${boundary}\r\nContent-Disposition: form-data; name="voice_visibility"\r\n\r\n${visibility}\r\n`;
-    fields += `--${boundary}\r\nContent-Disposition: form-data; name="language"\r\n\r\n${language}\r\n`;
-    fields += `--${boundary}--\r\n`;
-
-    const body = Buffer.concat([formDataBuffer, Buffer.from(fields)]);
-
-    return this._request('POST', '/tts/clone-voice', {
-      body,
-      isFormData: true,
-      headers: {
-        'Content-Type': `multipart/form-data; boundary=${boundary}`,
-        'Content-Length': body.length
-      }
-    });
   }
 
   // --------------------------------------------------------------------------
@@ -630,34 +558,6 @@ class VoiceAI {
   async getFirstVoices(count = 10) {
     const response = await this.listVoices({ limit: count });
     return response.voices || [];
-  }
-
-  /**
-   * Wait for voice to be ready after cloning
-   * @param {string} voiceId - The voice ID
-   * @param {Object} options - Polling options
-   * @param {number} options.maxAttempts - Max poll attempts (default: 30)
-   * @param {number} options.interval - Poll interval in ms (default: 2000)
-   * @returns {Promise<Object>} Voice object when ready
-   */
-  async waitForVoice(voiceId, options = {}) {
-    const { maxAttempts = 30, interval = 2000 } = options;
-    
-    for (let i = 0; i < maxAttempts; i++) {
-      const voice = await this.getVoice(voiceId);
-      
-      if (voice.status === VOICE_STATUS.AVAILABLE) {
-        return voice;
-      }
-      
-      if (voice.status === VOICE_STATUS.FAILED) {
-        throw new VoiceAIError('Voice processing failed', 'VOICE_FAILED');
-      }
-      
-      await new Promise(resolve => setTimeout(resolve, interval));
-    }
-    
-    throw new VoiceAIError('Timeout waiting for voice', 'TIMEOUT');
   }
 }
 
