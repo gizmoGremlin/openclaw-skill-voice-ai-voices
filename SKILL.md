@@ -2,9 +2,9 @@
 name: voice-ai-tts
 description: >
   High-quality voice synthesis with 9 personas, 11 languages, streaming, and voice cloning using Voice.ai API.
-version: 1.1.0
+version: 1.1.1
 tags: [tts, voice, speech, voice-ai, audio, streaming, voice-cloning, multilingual]
-metadata: {"openclaw":{"requires":{"bins":["node"],"env":{"VOICE_AI_API_KEY":"required"},"config_paths":[".env"],"note":"Set VOICE_AI_API_KEY via environment or .env"}}}
+metadata: {"openclaw":{"requires":{"bins":["node"],"env":{"VOICE_AI_API_KEY":"required"},"note":"Set VOICE_AI_API_KEY via environment variable or a skill-local .env file."}}}
 ---
 
 # Voice.ai Voices
@@ -42,6 +42,18 @@ export VOICE_AI_API_KEY="your-api-key"
 ```
 
 ---
+
+## 📦 Installation
+
+No install step is required. This skill bundles a Node.js CLI and SDK (no external npm dependencies).
+
+## 🧩 Key Files
+
+- [`scripts/tts.js`](scripts/tts.js) - CLI entrypoint
+- [`voice-ai-tts-sdk.js`](voice-ai-tts-sdk.js) - Node.js SDK used by the CLI
+- [`voices.json`](voices.json) - Voice definitions used by the CLI
+- [`voice-ai-tts.yaml`](voice-ai-tts.yaml) - API specification
+- [`package.json`](package.json) - Skill metadata for tooling
 
 ## 🌐 API Endpoint
 
@@ -289,8 +301,11 @@ const voices = await client.listVoices();
 
 ## 📋 Changelog
 
+### v1.1.1 (2026-02-16)
+- Packaging metadata improvements for ClawHub import (bin/files metadata)
+
 ### v1.1.0 (2026-02-16)
-- Declared required credentials and config paths in metadata
+- Declared required credentials in metadata
 - Documented the production API endpoint domain
 - Renamed voice personas for IP-safe labeling
 - Added `voices.json` for voice data

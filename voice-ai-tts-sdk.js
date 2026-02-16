@@ -4,7 +4,7 @@
  * A comprehensive JavaScript/Node.js SDK for Voice.ai's TTS API.
  * Supports voice cloning, speech generation, streaming, and voice management.
  * 
- * @version 1.1.0
+ * @version 1.1.1
  * @author Nick Gill (https://github.com/gizmoGremlin)
  * @license MIT
  * @see https://voice.ai/docs
@@ -216,7 +216,7 @@ class VoiceAI {
       port: url.port || (url.protocol === 'https:' ? 443 : 80),
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
-        'User-Agent': 'VoiceAI-SDK/1.0.0',
+        'User-Agent': 'VoiceAI-SDK/1.1.1',
         ...options.headers
       },
       timeout: this.timeout
@@ -318,7 +318,7 @@ class VoiceAI {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
-        'User-Agent': 'VoiceAI-SDK/1.0.0',
+        'User-Agent': 'VoiceAI-SDK/1.1.1',
         ...options.headers
       }
     };
