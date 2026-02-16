@@ -4,7 +4,7 @@
  * A comprehensive JavaScript/Node.js SDK for Voice.ai's TTS API.
  * Supports voice cloning, speech generation, streaming, and voice management.
  * 
- * @version 1.1.1
+ * @version 1.1.2
  * @author Nick Gill (https://github.com/gizmoGremlin)
  * @license MIT
  * @see https://voice.ai/docs
@@ -24,7 +24,6 @@
  */
 
 const https = require('https');
-const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
@@ -169,7 +168,7 @@ class VoiceAI {
    * @param {string} apiKey - Your Voice.ai API key
    * @param {Object} options - Configuration options
    * @param {string} options.baseUrl - API base URL (default: https://dev.voice.ai)
-   *   Note: dev.voice.ai is the official production API domain.
+   *   Note: dev.voice.ai is the official production API domain. Only https base URLs are supported.
    * @param {number} options.timeout - Request timeout in ms (default: 60000)
    */
   constructor(apiKey, options = {}) {
@@ -199,6 +198,10 @@ class VoiceAI {
    */
   async _request(method, endpoint, options = {}) {
     const url = new URL(`/api/${API_VERSION}${endpoint}`, this.baseUrl);
+
+    if (url.protocol !== 'https:') {
+      throw new ValidationError('Only https baseUrl is supported');
+    }
     
     // Add query parameters
     if (options.params) {
@@ -213,10 +216,10 @@ class VoiceAI {
       method,
       hostname: url.hostname,
       path: url.pathname + url.search,
-      port: url.port || (url.protocol === 'https:' ? 443 : 80),
+      port: url.port || 443,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
-        'User-Agent': 'VoiceAI-SDK/1.1.1',
+        'User-Agent': 'VoiceAI-SDK/1.1.2',
         ...options.headers
       },
       timeout: this.timeout
@@ -227,9 +230,7 @@ class VoiceAI {
     }
 
     return new Promise((resolve, reject) => {
-      const protocol = url.protocol === 'https:' ? https : http;
-      
-      const req = protocol.request(requestOptions, (res) => {
+      const req = https.request(requestOptions, (res) => {
         const chunks = [];
         
         res.on('data', chunk => chunks.push(chunk));
@@ -309,24 +310,26 @@ class VoiceAI {
    */
   _streamRequest(method, endpoint, options = {}) {
     const url = new URL(`/api/${API_VERSION}${endpoint}`, this.baseUrl);
+
+    if (url.protocol !== 'https:') {
+      throw new ValidationError('Only https baseUrl is supported');
+    }
     
     const requestOptions = {
       method,
       hostname: url.hostname,
       path: url.pathname,
-      port: url.port || (url.protocol === 'https:' ? 443 : 80),
+      port: url.port || 443,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
-        'User-Agent': 'VoiceAI-SDK/1.1.1',
+        'User-Agent': 'VoiceAI-SDK/1.1.2',
         ...options.headers
       }
     };
-
-    const protocol = url.protocol === 'https:' ? https : http;
     
     return new Promise((resolve, reject) => {
-      const req = protocol.request(requestOptions, (res) => {
+      const req = https.request(requestOptions, (res) => {
         if (res.statusCode >= 400) {
           const chunks = [];
           res.on('data', chunk => chunks.push(chunk));

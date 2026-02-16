@@ -1,15 +1,20 @@
 {
   "name": "voice-ai-tts",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "High-quality voice synthesis with 9 personas, 11 languages, streaming, and voice cloning using Voice.ai API.",
   "main": "SKILL.md",
   "bin": {
     "voice-ai-tts": "scripts/tts.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
     "SKILL.md",
     "README.md",
     "CHANGELOG.md",
+    "LICENSE",
+    "SECURITY.md",
     "voices.json",
     "voice-ai-tts.yaml",
     "voice-ai-tts-sdk.js",

@@ -4,7 +4,7 @@
 # A comprehensive skill for Voice.ai's TTS API with voice cloning,
 # speech generation, streaming, and voice management capabilities.
 #
-# Version: 1.1.1
+# Version: 1.1.2
 # Author: Nick Gill (https://github.com/gizmoGremlin)
 # License: MIT
 # Documentation: https://voice.ai/docs
@@ -19,7 +19,7 @@ skill:
     Voice.ai Developer API. Features include instant voice cloning, real-time
     streaming, WebSocket support for low-latency applications, and comprehensive
     voice management.
-  version: "1.1.1"
+  version: "1.1.2"
   author: "Nick Gill (https://github.com/gizmoGremlin)"
   icon: "🎙️"
   category: "audio"
@@ -804,6 +804,11 @@ examples:
 # ============================================================================
 
 changelog:
+  - version: "1.1.2"
+    date: "2026-02-16"
+    changes:
+      - "Add SECURITY.md and LICENSE for provenance"
+      - "Restrict SDK to https only (remove http transport)"
   - version: "1.1.1"
     date: "2026-02-16"
     changes:

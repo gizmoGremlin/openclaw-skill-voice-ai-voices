@@ -2,6 +2,8 @@
 
 High-quality voice synthesis with 9 personas, 11 languages, streaming, and voice cloning using the Voice.ai API.
 
+Requires Node.js 18+.
+
 ## Quick Start
 
 ```bash
@@ -38,6 +40,10 @@ ellie, oliver, lilith, smooth, shadow, sakura, zenith, flora, commander
 - `SKILL.md` for full usage and examples
 - `voice-ai-tts.yaml` for the API spec
 - `voice-ai-tts-sdk.js` for SDK usage
+
+## Security
+
+See `SECURITY.md` for a clear list of what the skill reads/writes locally and what endpoints it contacts.
 
 ## Links
 

@@ -2,7 +2,7 @@
 name: voice-ai-tts
 description: >
   High-quality voice synthesis with 9 personas, 11 languages, streaming, and voice cloning using Voice.ai API.
-version: 1.1.1
+version: 1.1.2
 tags: [tts, voice, speech, voice-ai, audio, streaming, voice-cloning, multilingual]
 metadata: {"openclaw":{"requires":{"bins":["node"],"env":{"VOICE_AI_API_KEY":"required"},"note":"Set VOICE_AI_API_KEY via environment variable or a skill-local .env file."}}}
 ---
@@ -54,6 +54,16 @@ No install step is required. This skill bundles a Node.js CLI and SDK (no extern
 - [`voices.json`](voices.json) - Voice definitions used by the CLI
 - [`voice-ai-tts.yaml`](voice-ai-tts.yaml) - API specification
 - [`package.json`](package.json) - Skill metadata for tooling
+
+## Security Notes
+
+See [`SECURITY.md`](SECURITY.md) for the full security and privacy overview.
+
+This skill:
+- Makes outbound HTTPS requests only to `https://dev.voice.ai`
+- Reads local files: `voices.json`, optional `.env`, and (only for voice cloning) the audio file path you provide
+- Writes audio output to the `--output` path (default `output.mp3`)
+- Does not execute shell commands and does not modify system configuration files
 
 ## 🌐 API Endpoint
 
@@ -300,6 +310,10 @@ const voices = await client.listVoices();
 ---
 
 ## 📋 Changelog
+
+### v1.1.2 (2026-02-16)
+- Added `SECURITY.md` and `LICENSE` for provenance and transparency
+- Restricted SDK transport to HTTPS only
 
 ### v1.1.1 (2026-02-16)
 - Packaging metadata improvements for ClawHub import (bin/files metadata)
